@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CURSOS COPAMEX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #072b4e;
+      margin: 0;
+      padding: 40px 20px;
+      color: #072b4e;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    #logo { display: block; margin: 0 auto 10px; max-width: 210px; }
+    h1 {
+      text-align: center;
+      font-weight: 900;
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: white;
+      letter-spacing: 0.1em;
+      user-select: none;
+    }
+    #busquedaContenedor {
+      max-width: 960px;
+      margin: 0 auto 40px;
+      text-align: center;
+    }
+    #inputBusqueda {
+      width: 100%;
+      max-width: 600px;
+      padding: 16px 22px;
+      font-size: 1.2rem;
+      border-radius: 40px;
+      border: 1px solid #cbd5e0;
+      background: white;
+      color: #072b4e;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    #inputBusqueda::placeholder { color: #a0aec0; }
+    #inputBusqueda:focus {
+      outline: none;
+      background: #f1f1f1;
+      border-color: #ffffff;
+    }
+    .maquinas-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      max-width: 960px;
+      margin: 0 auto 60px;
+    }
+    .maquina {
+      background: white;
+      color: #003366;
+      border-radius: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 36px 24px;
+      cursor: pointer;
+      width: 210px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .maquina:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .contenedor-maquina {
+      max-width: 960px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      padding: 40px 48px 50px;
+      position: relative;
+      color: #072b4e;
+    }
+    #tituloMaquina {
+      font-weight: 900;
+      font-size: 2.5rem;
+      margin-bottom: 36px;
+      border-bottom: 2px solid #072b4e;
+      padding-bottom: 12px;
+    }
+    #btnCerrarLista {
+      background: transparent;
+      border: 2px solid #072b4e;
+      color: #072b4e;
+      font-weight: 900;
+      font-size: 1.6rem;
+      border-radius: 50%;
+      padding: 10px;
+      cursor: pointer;
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #btnCerrarLista:hover { background: #072b4e; color: white; }
+    #btnCerrarLista::before { content: "×"; }
+    .formulario input,
+    .formulario button {
+      margin-bottom: 12px;
+    }
+    .formulario input[type="text"],
+    .formulario input[type="file"] {
+      padding: 12px 20px;
+      font-size: 1rem;
+      border: 1px solid #cbd5e0;
+      border-radius: 12px;
+      background: #f7fafc;
+      color: #072b4e;
+    }
+    .formulario input:focus {
+      outline: none;
+      border-color: #072b4e;
+      background: #edf2f7;
+    }
+    .formulario button {
+      background: #072b4e;
+      color: white;
+      font-weight: 600;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    .formulario button:hover { background: #072b4e; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    thead th {
+      background: #072b4e;
+      color: white;
+      padding: 12px;
+      text-align: left;
+    }
+    tbody td {
+      background: #f0f8ff;
+      color: #072b4e;
+      padding: 12px;
+      border-bottom: 1px solid #cbd5e0;
+    }
+    tbody tr:hover td { background: #dceefb; }
+    .acciones button {
+      background: transparent;
+      border: 2px solid #072b4e;
+      color: #072b4e;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .acciones button:hover { background: #072b4e; color: white; }
+    .boton-curso {
+      background: #fff9c4;
+      color: #333;
+      border: none;
+      padding: 6px 12px;
+      margin: 4px 2px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.3s ease;
+    }
+    .boton-curso:hover {
+      background: #fff176;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .modal-content {
+      background: white;
+      padding: 20px 40px 30px 40px;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      position: relative;
+    }
+    .modal-content h3 {
+      margin-top: 0;
+    }
+    .modal-content input[type="text"],
+    .modal-content input[type="file"] {
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .modal-content button {
+      margin-top: 10px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      background: #072b4e;
+      color: white;
+      cursor: pointer;
+    }
+    #btnCerrarModal {
+      background: transparent;
+      border: 2px solid #072b4e;
+      color: #072b4e;
+      font-weight: 900;
+      font-size: 1.6rem;
+      border-radius: 50%;
+      padding: 10px;
+      cursor: pointer;
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    #btnCerrarModal:hover {
+      background: #072b4e;
+      color: white;
+    }
+    #btnCerrarModal::before { content: "×"; }
+  </style>
+</head>
+<body>
+<img id="logo" src="https://www.copamexcorrugados.com/assets/imgs/copamex_blanco.png" alt="Logo COPAMEX" />
+
+<h1>CURSOS COPAMEX</h1>
+
+<div id="busquedaContenedor">
+  <input type="text" id="inputBusqueda" placeholder="NUMERO DE EMPLEADO O NOMBRE" oninput="buscarRegistros()" />
+</div>
+
+<div class="maquinas-container" id="maquinasContainer"></div>
+
+<div class="contenedor-maquina" id="contenedorMaquina" style="display:none;">
+  <button id="btnCerrarLista" onclick="cerrarLista()"></button>
+  <h2 id="tituloMaquina"></h2>
+  <div class="formulario">
+    <input type="text" id="empleado" placeholder="Número de Empleado" />
+    <input type="text" id="nombre" placeholder="Nombre Completo" />
+    <input type="text" id="curso" placeholder="Nombre del Curso (opcional)" />
+    <input type="file" id="archivo" accept="application/pdf" />
+    <button onclick="agregarRegistro()">REGISTRO NUEVO</button>
+  </div>
+
+  <table id="tablaRegistros">
+    <thead>
+      <tr>
+        <th>EMPLEADO</th>
+        <th>NOMBRE COMPLETO</th>
+        <th>CURSOS</th>
+        <th>ACCIONES</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<div class="contenedor-maquina" id="resultadosBusqueda" style="display:none;">
+  <h2>RESULTADOS DE BUSQUEDA</h2>
+  <table id="tablaBusqueda">
+    <thead>
+      <tr>
+        <th>EMPLEADO</th>
+        <th>NOMBRE COMPLETO</th>
+        <th>MAQUINA</th>
+        <th>CURSOS</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<!-- Modal para agregar curso -->
+<div class="modal" id="modalCurso">
+  <div class="modal-content">
+    <button id="btnCerrarModal" title="Cerrar"></button>
+    <h3>AGREGAR CURSO NUEVO</h3>
+    <input type="text" id="nuevoCursoNombre" placeholder="Nombre del Curso" />
+    <input type="file" id="nuevoCursoArchivo" accept="application/pdf" />
+    <button onclick="guardarNuevoCurso()">AGREGAR</button>
+  </div>
+</div>
+
+<script>
+const maquinas = [
+  "MAQUINA 1","MAQUINA 2","MAQUINA 3","MAQUINA 4","CENTRAL DE PASTAS",
+  "MATERIAS PRIMAS","MANTT. MEC. Y ELEC.","CONVERSION Y ACABADO","SERVICIOS",
+  "EMBARQUES", "EMPLEADOS"
+];
+let db, maquinaSeleccionada = null;
+let idEditar = null;
+
+window.onload = () => {
+  const request = indexedDB.open("SistemaMaquinas", 1);
+  request.onupgradeneeded = e => {
+    db = e.target.result;
+    if (!db.objectStoreNames.contains("registros"))
+      db.createObjectStore("registros", { keyPath: "id", autoIncrement: true });
+  };
+  request.onsuccess = e => {
+    db = e.target.result;
+    renderMaquinas();
+  };
+};
+
+function renderMaquinas() {
+  const container = document.getElementById("maquinasContainer");
+  container.innerHTML = "";
+  maquinas.forEach(nombre => {
+    const div = document.createElement("div");
+    div.className = "maquina";
+    div.textContent = nombre;
+    div.onclick = () => seleccionarMaquina(nombre);
+    container.appendChild(div);
+  });
+}
+
+function seleccionarMaquina(nombre) {
+  maquinaSeleccionada = nombre;
+  document.getElementById("tituloMaquina").textContent = nombre;
+  document.getElementById("contenedorMaquina").style.display = "block";
+  document.getElementById("maquinasContainer").style.display = "none";
+  document.getElementById("resultadosBusqueda").style.display = "none";
+  limpiarFormulario();
+  cargarRegistros();
+}
+
+function cerrarLista() {
+  maquinaSeleccionada = null;
+  document.getElementById("contenedorMaquina").style.display = "none";
+  document.getElementById("maquinasContainer").style.display = "flex";
+}
+
+function cargarRegistros() {
+  const tbody = document.querySelector("#tablaRegistros tbody");
+  tbody.innerHTML = "";
+  const store = db.transaction(["registros"], "readonly").objectStore("registros");
+  store.getAll().onsuccess = e => {
+    e.target.result.filter(r => r.maquina === maquinaSeleccionada).forEach(registro => {
+      const tr = document.createElement("tr");
+      const cursosHTML = registro.cursos.length
+        ? registro.cursos.map((c, index) =>
+            `<button class="boton-curso" onclick="${c.archivo ? `verPDF('${c.archivo}')` : `alert('Esta persona tomó este curso')`}">${c.nombre}</button>
+             <button style="margin-left:5px;color:red;border:none;background:none;font-weight:bold;cursor:pointer" onclick="eliminarCurso(${registro.id}, ${index})">❌</button>`
+          ).join(" ")
+        : "N/A";
+      tr.innerHTML = `
+        <td>${registro.empleado}</td>
+        <td>
+          <span id="nombre-${registro.id}">${registro.nombre}</span>
+          <button style="margin-left:8px;" onclick="editarNombre(${registro.id})">✏️</button>
+        </td>
+        <td class="cursos">${cursosHTML}</td>
+        <td class="acciones">
+          <button onclick="editarRegistro(${registro.id})">📄</button>
+          <button onclick="eliminarRegistro(${registro.id})">🗑️</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  };
+}
+
+function editarNombre(id) {
+  const nuevoNombre = prompt("Nuevo nombre:");
+  if (!nuevoNombre) return;
+  const store = db.transaction(["registros"], "readwrite").objectStore("registros");
+  store.get(id).onsuccess = e => {
+    const registro = e.target.result;
+    registro.nombre = nuevoNombre;
+    const updateStore = db.transaction(["registros"], "readwrite").objectStore("registros");
+    updateStore.put(registro).onsuccess = cargarRegistros;
+  };
+}
+
+function eliminarCurso(idRegistro, indexCurso) {
+  if (!confirm("¿Deseas eliminar este curso?")) return;
+  const store = db.transaction(["registros"], "readwrite").objectStore("registros");
+  store.get(idRegistro).onsuccess = e => {
+    const registro = e.target.result;
+    registro.cursos.splice(indexCurso, 1);
+    const updateStore = db.transaction(["registros"], "readwrite").objectStore("registros");
+    updateStore.put(registro).onsuccess = cargarRegistros;
+  };
+}
+
+function buscarRegistros() {
+  const query = document.getElementById("inputBusqueda").value.trim().toLowerCase();
+  const contenedorMaquina = document.getElementById("contenedorMaquina");
+  const maquinasContainer = document.getElementById("maquinasContainer");
+  const resultadosBusqueda = document.getElementById("resultadosBusqueda");
+  const tbodyBusqueda = document.querySelector("#tablaBusqueda tbody");
+
+  if (!query) {
+    resultadosBusqueda.style.display = "none";
+    contenedorMaquina.style.display = "none";
+    maquinasContainer.style.display = "flex";
+    return;
+  }
+
+  maquinasContainer.style.display = "none";
+  contenedorMaquina.style.display = "none";
+  resultadosBusqueda.style.display = "block";
+  tbodyBusqueda.innerHTML = "";
+
+  const store = db.transaction(["registros"], "readonly").objectStore("registros");
+  store.getAll().onsuccess = e => {
+    const registros = e.target.result;
+    const filtrados = registros.filter(r =>
+      r.empleado.toLowerCase().includes(query) || r.nombre.toLowerCase().includes(query)
+    );
+
+    if (filtrados.length === 0) {
+      tbodyBusqueda.innerHTML = `<tr><td colspan="4" style="text-align:center; font-style:italic; color:#ddd;">No se encontraron registros</td></tr>`;
+      return;
+    }
+
+    filtrados.forEach(registro => {
+      let cursosHTML = registro.cursos.length ? registro.cursos.map(c =>
+        c.archivo ? `<button class="boton-curso" onclick="verPDF('${c.archivo}')">${c.nombre}</button>` :
+        `<span class="boton-curso" style="background:#fff9c4; color:#333; cursor:default;">${c.nombre}</span>`
+      ).join(" ") : "N/A";
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${registro.empleado}</td>
+        <td>${registro.nombre}</td>
+        <td>${registro.maquina}</td>
+        <td>${cursosHTML}</td>
+      `;
+      tbodyBusqueda.appendChild(tr);
+    });
+  };
+}
+
+function agregarRegistro() {
+  const empleado = document.getElementById("empleado").value.trim();
+  const nombre = document.getElementById("nombre").value.trim();
+  const curso = document.getElementById("curso").value.trim();
+  const archivoInput = document.getElementById("archivo");
+
+  if (!empleado || !nombre) return alert("Empleado y Nombre son obligatorios.");
+
+  const store = db.transaction(["registros"], "readwrite").objectStore("registros");
+  store.getAll().onsuccess = e => {
+    const registros = e.target.result;
+    const existente = registros.find(r => r.empleado === empleado && r.maquina === maquinaSeleccionada);
+    const cursos = [];
+
+    if (curso && archivoInput.files[0]) {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        cursos.push({ nombre: curso, archivo: ev.target.result });
+        guardarRegistro(existente, empleado, nombre, cursos);
+      };
+      reader.readAsDataURL(archivoInput.files[0]);
+    } else if (curso) {
+      cursos.push({ nombre: curso, archivo: null });
+      guardarRegistro(existente, empleado, nombre, cursos);
+    } else {
+      guardarRegistro(existente, empleado, nombre, cursos);
+    }
+  };
+}
+
+function guardarRegistro(existente, empleado, nombre, cursos) {
+  const store = db.transaction(["registros"], "readwrite").objectStore("registros");
+  if (existente) {
+    existente.cursos.push(...cursos);
+    store.put(existente).onsuccess = () => { cargarRegistros(); limpiarFormulario(); };
+  } else {
+    store.add({ empleado, nombre, maquina: maquinaSeleccionada, cursos }).onsuccess = () => {
+      cargarRegistros(); limpiarFormulario();
+    };
+  }
+}
+
+function editarRegistro(id) {
+  idEditar = id;
+  document.getElementById("modalCurso").style.display = "flex";
+  document.getElementById("nuevoCursoNombre").value = "";
+  document.getElementById("nuevoCursoArchivo").value = "";
+}
+
+function guardarNuevoCurso() {
+  const nuevoCurso = document.getElementById("nuevoCursoNombre").value.trim();
+  const archivoInput = document.getElementById("nuevoCursoArchivo");
+
+  if (!nuevoCurso) return alert("Por favor ingresa el nombre del curso.");
+
+  const store = db.transaction(["registros"], "readwrite").objectStore("registros");
+  store.get(idEditar).onsuccess = ev => {
+    const registro = ev.target.result;
+
+    if (archivoInput.files[0]) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        registro.cursos.push({ nombre: nuevoCurso, archivo: e.target.result });
+        const actualizar = db.transaction(["registros"], "readwrite").objectStore("registros");
+        actualizar.put(registro).onsuccess = () => {
+          cargarRegistros();
+          cerrarModal();
+        };
+      };
+      reader.readAsDataURL(archivoInput.files[0]);
+    } else {
+      registro.cursos.push({ nombre: nuevoCurso, archivo: null });
+      const actualizar = db.transaction(["registros"], "readwrite").objectStore("registros");
+      actualizar.put(registro).onsuccess = () => {
+        cargarRegistros();
+        cerrarModal();
+      };
+    }
+  };
+}
+
+function cerrarModal() {
+  document.getElementById("modalCurso").style.display = "none";
+}
+
+function eliminarRegistro(id) {
+  if (confirm("¿Eliminar este registro?"))
+    db.transaction(["registros"], "readwrite").objectStore("registros").delete(id).onsuccess = cargarRegistros;
+}
+
+function verPDF(data) {
+  if (!data) return alert("Este curso no tiene comprobante.");
+  const blob = new Blob([Uint8Array.from(atob(data.split(',')[1]), c => c.charCodeAt(0))], { type: 'application/pdf' });
+  window.open(URL.createObjectURL(blob));
+}
+
+function limpiarFormulario() {
+  document.getElementById("empleado").value = "";
+  document.getElementById("nombre").value = "";
+  document.getElementById("curso").value = "";
+  document.getElementById("archivo").value = "";
+}
+
+// Cerrar modal al hacer click fuera del contenido
+document.getElementById("modalCurso").addEventListener("click", e => {
+  if (e.target.id === "modalCurso") cerrarModal();
+});
+
+// Cerrar modal con botón X
+document.getElementById("btnCerrarModal").addEventListener("click", cerrarModal);
+</script>
+</body>
+</html>
